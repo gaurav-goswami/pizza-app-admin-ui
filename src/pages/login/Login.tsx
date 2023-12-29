@@ -1,17 +1,9 @@
-import { Button, Card, Checkbox, Form, Input, Layout, Space } from "antd";
-import { LockFilled, UserOutlined, LockOutlined  } from "@ant-design/icons";
+import { Button, Card, Checkbox, Flex, Form, Input, Layout, Space } from "antd";
+import { LockFilled, UserOutlined, LockOutlined } from "@ant-design/icons";
 
 const Login = () => {
   return (
     <>
-      {/* <h1>Sign In</h1>
-        <input type="text" placeholder="Username" />
-        <input type="password" placeholder="Password" />
-        <button>Log In</button>
-        <label htmlFor="remember-me">Remember Me</label>
-        <input type="checkbox" id="remember-me" />
-        <a href="#">Forgot Password</a> */}
-
       <Layout
         style={{ height: "100vh", display: "grid", placeItems: "center" }}
       >
@@ -27,17 +19,50 @@ const Login = () => {
           }
           style={{ width: 300 }}
         >
-          <Form>
-            <Form.Item name="username">
+          <Form
+            initialValues={{
+              remember: true,
+            }}
+          >
+            <Form.Item
+              name="username"
+              rules={[
+                {
+                  required: true,
+                  message: "Email is required",
+                },
+                {
+                  type: "email",
+                  message: "Enter a valid email",
+                },
+              ]}
+            >
               <Input prefix={<UserOutlined />} placeholder="Username" />
             </Form.Item>
-            <Form.Item name="password">
-              <Input.Password prefix={<LockOutlined />} placeholder="Password" />
+            <Form.Item
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: "Password is required",
+                },
+                {
+                  min: 8,
+                  message: "Password should be of min. 8 characters",
+                },
+              ]}
+            >
+              <Input.Password
+                prefix={<LockOutlined />}
+                placeholder="Password"
+              />
             </Form.Item>
-            <Form.Item name="remember">
-              <Checkbox>Remember me</Checkbox>
-              <a href="">Forgot password</a>
-            </Form.Item>
+            <Flex justify="space-between">
+              <Form.Item name="remember" valuePropName="checked">
+                <Checkbox>Remember me</Checkbox>
+              </Form.Item>
+              <a href="" id="login-forgot">Forgot password</a>
+            </Flex>
             <Form.Item>
               <Button
                 type="primary"
