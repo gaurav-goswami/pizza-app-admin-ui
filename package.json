@@ -11,7 +11,9 @@
     "test": "vitest --watch"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.15.0",
     "antd": "^5.12.5",
+    "axios": "^1.6.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.21.1"
