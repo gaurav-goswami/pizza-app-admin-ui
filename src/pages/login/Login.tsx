@@ -1,39 +1,53 @@
-import { Alert, Button, Card, Checkbox, Flex, Form, Input, Layout, Space } from "antd";
+import {
+  Alert,
+  Button,
+  Card,
+  Checkbox,
+  Flex,
+  Form,
+  Input,
+  Layout,
+  Space,
+} from "antd";
 import { LockFilled, UserOutlined, LockOutlined } from "@ant-design/icons";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { TCredentials } from "../../types";
-import { login, self } from "../../http/api";
+import { login, logout, self } from "../../http/api";
 import { useAuthStore } from "../../store";
+import { usePermission } from "../../hooks/usePermission";
 
 const loginUser = async (credentials: TCredentials) => {
-  const {data} = await login(credentials);
+  const { data } = await login(credentials);
   return data;
-}
+};
 
 const getSelf = async () => {
-  const {data} = await self();
+  const { data } = await self();
   return data;
-}
+};
 
 const Login = () => {
+  const { isAllowed } = usePermission();
 
-  const { setUser } = useAuthStore();
- 
-  const {refetch} = useQuery({
-    queryKey: ['self'],
+  const { setUser, logout: logoutFromStore } = useAuthStore();
+
+  const { refetch } = useQuery({
+    queryKey: ["self"],
     queryFn: getSelf,
-    enabled: false
-  })
+    enabled: false,
+  });
 
-  const {mutate, isPending, isError, error} = useMutation({
-    mutationKey: ['login'],
+  const { mutate, isPending, isError, error } = useMutation({
+    mutationKey: ["login"],
     mutationFn: loginUser,
     onSuccess: async () => {
       const selfDataPromise = await refetch();
       setUser(selfDataPromise.data);
-      console.log('user data', selfDataPromise.data);
-      console.log('Login success')
-    }
+      if (!isAllowed(selfDataPromise.data)) {
+        await logout();
+        logoutFromStore();
+      }
+    },
   });
 
   return (
@@ -58,14 +72,17 @@ const Login = () => {
               remember: true,
             }}
             onFinish={(values) => {
-              const {email, password} = values;
-              mutate({email, password});
+              const { email, password } = values;
+              mutate({ email, password });
             }}
           >
-
-            {
-              isError && <Alert type="error" message={error.message} style={{marginBottom: 20}}/>
-            }
+            {isError && (
+              <Alert
+                type="error"
+                message={error.message}
+                style={{ marginBottom: 20 }}
+              />
+            )}
 
             <Form.Item
               name="email"
@@ -104,7 +121,9 @@ const Login = () => {
               <Form.Item name="remember" valuePropName="checked">
                 <Checkbox>Remember me</Checkbox>
               </Form.Item>
-              <a href="" id="login-forgot">Forgot password</a>
+              <a href="" id="login-forgot">
+                Forgot password
+              </a>
             </Flex>
             <Form.Item>
               <Button
