@@ -3,6 +3,7 @@ import { LockFilled, UserOutlined, LockOutlined } from "@ant-design/icons";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { TCredentials } from "../../types";
 import { login, self } from "../../http/api";
+import { useAuthStore } from "../../store";
 
 const loginUser = async (credentials: TCredentials) => {
   const {data} = await login(credentials);
@@ -11,11 +12,14 @@ const loginUser = async (credentials: TCredentials) => {
 
 const getSelf = async () => {
   const {data} = await self();
+  return data;
 }
 
 const Login = () => {
 
-  const {data: selfData, refetch} = useQuery({
+  const { setUser } = useAuthStore();
+ 
+  const {refetch} = useQuery({
     queryKey: ['self'],
     queryFn: getSelf,
     enabled: false
@@ -25,8 +29,9 @@ const Login = () => {
     mutationKey: ['login'],
     mutationFn: loginUser,
     onSuccess: async () => {
-      refetch();
-      console.log('user data', selfData);
+      const selfDataPromise = await refetch();
+      setUser(selfDataPromise.data);
+      console.log('user data', selfDataPromise.data);
       console.log('Login success')
     }
   });
