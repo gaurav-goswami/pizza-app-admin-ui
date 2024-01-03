@@ -21,7 +21,7 @@ const Root = () => {
         return false;
       };
       
-      return failureCount < 3;
+      return failureCount < 1;
     }
   });
 

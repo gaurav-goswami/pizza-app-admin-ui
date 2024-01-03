@@ -1,24 +1,20 @@
-import {
-  Alert,
-  Button,
-  Card,
-  Checkbox,
-  Flex,
-  Form,
-  Input,
-  Layout,
-  Space,
-} from "antd";
+import { Button, Card, Checkbox, Flex, Form, Input, Layout, Space } from "antd";
 import { LockFilled, UserOutlined, LockOutlined } from "@ant-design/icons";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { TCredentials } from "../../utils/types";
 import { login, logout, self } from "../../http/apis/api";
 import { useAuthStore } from "../../store";
 import { usePermission } from "../../hooks/usePermission";
+import { throwErrorMessage } from "../../utils/methods";
 
 const loginUser = async (credentials: TCredentials) => {
-  const { data } = await login(credentials);
-  return data;
+  try {
+    const { data } = await login(credentials);
+    return data;
+  } catch (error: any) {
+    throwErrorMessage({err: error});
+    throw error;
+  }
 };
 
 const getSelf = async () => {
@@ -37,16 +33,16 @@ const Login = () => {
     enabled: false,
   });
 
-  const {mutate: logoutMutation} = useMutation({
-    mutationKey: ['logout'],
+  const { mutate: logoutMutation } = useMutation({
+    mutationKey: ["logout"],
     mutationFn: logout,
     onSuccess: async () => {
       logoutFromStore();
       return;
-    }
-  })  
+    },
+  });
 
-  const { mutate, isPending, isError, error } = useMutation({
+  const { mutate: loginMutation, isPending: loginPending } = useMutation({
     mutationKey: ["login"],
     mutationFn: loginUser,
     onSuccess: async () => {
@@ -82,17 +78,9 @@ const Login = () => {
             }}
             onFinish={(values) => {
               const { email, password } = values;
-              mutate({ email, password });
+              loginMutation({ email, password });
             }}
           >
-            {isError && (
-              <Alert
-                type="error"
-                message={error.message}
-                style={{ marginBottom: 20 }}
-              />
-            )}
-
             <Form.Item
               name="email"
               rules={[
@@ -139,7 +127,7 @@ const Login = () => {
                 type="primary"
                 htmlType="submit"
                 style={{ width: "100%" }}
-                loading={isPending}
+                loading={loginPending}
               >
                 Log in
               </Button>
