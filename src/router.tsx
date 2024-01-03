@@ -4,10 +4,11 @@ import Login from "./pages/login/Login";
 import Dashboard from "./Layouts/Dashboard";
 import NonAuth from "./Layouts/NonAuth";
 import Root from "./Layouts/Root";
+import { DASHBOARD_ROUTES, NON_AUTH_ROUTES } from "./utils/routeConstants";
 
 export const router = createBrowserRouter([
   {
-    path: "/",
+    path: DASHBOARD_ROUTES.root,
     element: <Root />,
     children: [
       {
@@ -21,11 +22,11 @@ export const router = createBrowserRouter([
         ],
       },
       {
-        path: "/auth",
+        path: NON_AUTH_ROUTES.auth,
         element: <NonAuth />,
         children: [
           {
-            path: "login",
+            path: NON_AUTH_ROUTES.login,
             element: <Login />,
           },
         ],

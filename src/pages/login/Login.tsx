@@ -11,8 +11,8 @@ import {
 } from "antd";
 import { LockFilled, UserOutlined, LockOutlined } from "@ant-design/icons";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { TCredentials } from "../../types";
-import { login, logout, self } from "../../http/api";
+import { TCredentials } from "../../utils/types";
+import { login, logout, self } from "../../http/apis/api";
 import { useAuthStore } from "../../store";
 import { usePermission } from "../../hooks/usePermission";
 

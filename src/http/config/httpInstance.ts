@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useAuthStore } from '../store';
+import { useAuthStore } from '../../store';
 
 const httpInstance = axios.create({
     baseURL: import.meta.env.VITE_BACKEND_API_URL,
