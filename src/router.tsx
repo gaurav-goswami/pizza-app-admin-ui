@@ -1,10 +1,14 @@
 import { createBrowserRouter } from "react-router-dom";
-import HomePage from "./pages/HomePage";
-import Login from "./pages/login/Login";
+import { DASHBOARD_ROUTES, NON_AUTH_ROUTES } from "./utils/routeConstants";
+// layouts
+import Root from "./Layouts/Root";
 import Dashboard from "./Layouts/Dashboard";
 import NonAuth from "./Layouts/NonAuth";
-import Root from "./Layouts/Root";
-import { DASHBOARD_ROUTES, NON_AUTH_ROUTES } from "./utils/routeConstants";
+
+// Protected pages
+import DashboardPage from "./pages/ProtectedRoutes/Dashboard/Dashboard";
+
+import Login from "./pages/login/Login";
 
 export const router = createBrowserRouter([
   {
@@ -17,7 +21,7 @@ export const router = createBrowserRouter([
         children: [
           {
             path: "",
-            element: <HomePage />,
+            element: <DashboardPage />,
           },
         ],
       },

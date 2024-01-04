@@ -6,6 +6,7 @@ import { RouterProvider } from "react-router-dom";
 import { router } from "./router.tsx";
 import { ConfigProvider } from "antd";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {COLORS} from './styles/colors.ts';
 
 const queryClient = new QueryClient();
 
@@ -15,8 +16,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <ConfigProvider
         theme={{
           token: {
-            colorPrimary: "#F65F42",
-            colorLink: "#F65F42",
+            colorPrimary: COLORS.COLOR_PRIMARY,
+            colorLink: COLORS.COLOR_PRIMARY,
           },
         }}
       >
