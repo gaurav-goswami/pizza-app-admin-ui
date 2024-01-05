@@ -1,6 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuthStore } from "../store";
 import { NON_AUTH_ROUTES } from "../utils/routeConstants";
+import DashboardSideBar from "../Components/General/DashboardSideBar";
 
 const Dashboard = () => {
   const { user } = useAuthStore();
@@ -10,7 +11,9 @@ const Dashboard = () => {
 
   return (
     <>
-      <Outlet />
+      <DashboardSideBar>
+        <Outlet />
+      </DashboardSideBar>
     </>
   );
 };

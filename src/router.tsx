@@ -9,6 +9,10 @@ import NonAuth from "./Layouts/NonAuth";
 import DashboardPage from "./pages/ProtectedRoutes/Dashboard/Dashboard";
 
 import Login from "./pages/login/Login";
+import Users from "./pages/ProtectedRoutes/Dashboard/Users/Users";
+import Restaurants from "./pages/ProtectedRoutes/Dashboard/Restaurants/Restaurants";
+import Products from "./pages/ProtectedRoutes/Dashboard/Products/Products";
+import Promos from "./pages/ProtectedRoutes/Dashboard/Promos/Promos";
 
 export const router = createBrowserRouter([
   {
@@ -22,6 +26,22 @@ export const router = createBrowserRouter([
           {
             path: "",
             element: <DashboardPage />,
+          },
+          {
+            path: DASHBOARD_ROUTES.users,
+            element: <Users />,
+          },
+          {
+            path: DASHBOARD_ROUTES.restaurants,
+            element: <Restaurants />,
+          },
+          {
+            path: DASHBOARD_ROUTES.products,
+            element: <Products />,
+          },
+          {
+            path: DASHBOARD_ROUTES.promos,
+            element: <Promos />,
           },
         ],
       },
