@@ -8,14 +8,13 @@ import { IoBagCheck } from "react-icons/io5";
 import { GiKnifeFork } from "react-icons/gi";
 import { FaGift } from "react-icons/fa6";
 import { BellFilled } from "@ant-design/icons";
-import { useMutation } from "@tanstack/react-query";
-import { logout } from "../../http/apis/api";
-import { useAuthStore } from "../../store";
+import useLogout from "../../hooks/useLogout";
 
 const { Sider, Header, Footer, Content } = Layout;
 const DashboardSideBar = ({ children }: { children: ReactNode }) => {
   const [collapsed, setCollapsed] = useState(false);
   const { pathname } = useLocation();
+  const {logoutUser} = useLogout();
 
   const {
     token: { colorBgContainer },
@@ -49,17 +48,6 @@ const DashboardSideBar = ({ children }: { children: ReactNode }) => {
     },
   ];
 
-  const {logout: logoutFromStore} = useAuthStore();
-
-  const {mutate: logoutMutation} = useMutation({
-    mutationFn: logout,
-    mutationKey: ['logout'],
-    onSuccess: () => {
-      logoutFromStore();
-      return;
-    }
-  })
-
   return (
     <>
       <Layout style={{ minHeight: "100vh" }}>
@@ -91,7 +79,7 @@ const DashboardSideBar = ({ children }: { children: ReactNode }) => {
                       label: (
                         'Logout'
                       ),
-                      onClick: () => logoutMutation()
+                      onClick: () => logoutUser()
                     }
                   ] }} placement="bottomRight">
                     <Avatar style={{ background: '#fde3cf', color: '#f56a00'}}>

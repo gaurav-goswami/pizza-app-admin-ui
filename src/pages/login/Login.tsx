@@ -6,13 +6,14 @@ import { login, logout, self } from "../../http/apis/api";
 import { useAuthStore } from "../../store";
 import { usePermission } from "../../hooks/usePermission";
 import { throwErrorMessage } from "../../utils/methods";
+import useLogout from "../../hooks/useLogout";
 
 const loginUser = async (credentials: TCredentials) => {
   try {
     const { data } = await login(credentials);
     return data;
   } catch (error: any) {
-    throwErrorMessage({err: error});
+    throwErrorMessage({ err: error });
     throw error;
   }
 };
@@ -25,7 +26,7 @@ const getSelf = async () => {
 const Login = () => {
   const { isAllowed } = usePermission();
 
-  const { setUser, logout: logoutFromStore } = useAuthStore();
+  const { setUser } = useAuthStore();
 
   const { refetch } = useQuery({
     queryKey: ["self"],
@@ -33,14 +34,7 @@ const Login = () => {
     enabled: false,
   });
 
-  const { mutate: logoutMutation } = useMutation({
-    mutationKey: ["logout"],
-    mutationFn: logout,
-    onSuccess: async () => {
-      logoutFromStore();
-      return;
-    },
-  });
+  const { logoutUser } = useLogout();
 
   const { mutate: loginMutation, isPending: loginPending } = useMutation({
     mutationKey: ["login"],
@@ -49,7 +43,7 @@ const Login = () => {
       const selfDataPromise = await refetch();
       if (!isAllowed(selfDataPromise.data)) {
         await logout();
-        logoutMutation();
+        logoutUser();
       }
       setUser(selfDataPromise.data);
     },
