@@ -1,7 +1,8 @@
 import { User } from "../store";
+import { DASHBOARD_ALLOWED_ROLES } from "../utils/constants";
 
 export const usePermission = () => {
-  const allowedRoles = ["admin", "manager"];
+  const allowedRoles = [DASHBOARD_ALLOWED_ROLES.ADMIN, DASHBOARD_ALLOWED_ROLES.MANAGER];
 
   const _hasPermission = (user: User | null) => {
     if (user) {

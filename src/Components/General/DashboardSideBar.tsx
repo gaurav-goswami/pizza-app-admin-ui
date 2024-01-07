@@ -9,12 +9,16 @@ import { GiKnifeFork } from "react-icons/gi";
 import { FaGift } from "react-icons/fa6";
 import { BellFilled } from "@ant-design/icons";
 import useLogout from "../../hooks/useLogout";
+import BreadcrumbItem from "antd/es/breadcrumb/BreadcrumbItem";
+import { useAuthStore } from "../../store";
+import { DASHBOARD_ALLOWED_ROLES } from "../../utils/constants";
 
 const { Sider, Header, Footer, Content } = Layout;
 const DashboardSideBar = ({ children }: { children: ReactNode }) => {
   const [collapsed, setCollapsed] = useState(false);
   const { pathname } = useLocation();
   const {logoutUser} = useLogout();
+  const {user} = useAuthStore();
 
   const {
     token: { colorBgContainer },
@@ -68,7 +72,7 @@ const DashboardSideBar = ({ children }: { children: ReactNode }) => {
         <Layout>
           <Header style={{ padding: "0 16px", background: colorBgContainer }}>
             <Flex gap="middle" align="center" justify="space-between">
-              <Badge text="Global" status="success" />
+              <Badge text={user?.role === DASHBOARD_ALLOWED_ROLES.ADMIN ? 'Admin' : user?.tenant?.address} status="success" />
               <Space size={16}>
                 <Badge dot>
                   <BellFilled />
@@ -91,8 +95,8 @@ const DashboardSideBar = ({ children }: { children: ReactNode }) => {
           </Header>
           <Content style={{ margin: "0 16px" }}>
             <Breadcrumb style={{ margin: "16px 0" }}>
-              <Breadcrumb.Item>Dashboard</Breadcrumb.Item>
-              <Breadcrumb.Item>{pathname.replace("/", "")}</Breadcrumb.Item>
+              <BreadcrumbItem>Dashboard</BreadcrumbItem>
+              <BreadcrumbItem>{pathname.replace("/", "")}</BreadcrumbItem>
             </Breadcrumb>
             {children}
           </Content>
