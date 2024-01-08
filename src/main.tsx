@@ -6,7 +6,7 @@ import { RouterProvider } from "react-router-dom";
 import { router } from "./router.tsx";
 import { ConfigProvider } from "antd";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import {COLORS} from './styles/colors.ts';
+import {COLORS} from './styles/theme.ts';
 
 const queryClient = new QueryClient();
 

@@ -9,10 +9,10 @@ import NonAuth from "./Layouts/NonAuth";
 import DashboardPage from "./pages/ProtectedRoutes/Dashboard/Dashboard";
 
 import Login from "./pages/login/Login";
-import Users from "./pages/ProtectedRoutes/Dashboard/Users/Users";
-import Restaurants from "./pages/ProtectedRoutes/Dashboard/Restaurants/Restaurants";
-import Products from "./pages/ProtectedRoutes/Dashboard/Products/Products";
-import Promos from "./pages/ProtectedRoutes/Dashboard/Promos/Promos";
+import Users from "./pages/ProtectedRoutes/Users/Users";
+import Restaurants from "./pages/ProtectedRoutes/Restaurants/Restaurants";
+import Products from "./pages/ProtectedRoutes/Products/Products";
+import Promos from "./pages/ProtectedRoutes/Promos/Promos";
 
 export const router = createBrowserRouter([
   {
