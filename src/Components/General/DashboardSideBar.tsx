@@ -93,7 +93,7 @@ const DashboardSideBar = ({ children }: { children: ReactNode }) => {
               </Space>
             </Flex>
           </Header>
-          <Content style={{ margin: "0 16px" }}>
+          <Content style={{ margin: "0 10px" }}>
             <Breadcrumb style={{ margin: "16px 0" }}>
               <BreadcrumbItem>Dashboard</BreadcrumbItem>
               <BreadcrumbItem>{pathname.replace("/", "")}</BreadcrumbItem>

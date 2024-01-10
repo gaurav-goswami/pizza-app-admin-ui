@@ -11,7 +11,7 @@ const DashboardCard = ({ data }: { data: TDashboardCard }) => {
     <>
       <Flex
         vertical
-        className="py-1.5 px-2 bg-white w-[250px] rounded-md"
+        className="py-1.5 px-2 bg-white w-[250px] rounded-md h-max"
         gap="10px"
       >
         <Flex gap="5px" align="center">

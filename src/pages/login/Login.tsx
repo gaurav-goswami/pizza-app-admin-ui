@@ -118,7 +118,7 @@ const Login = () => {
             </Flex>
             <Form.Item>
               <Button
-                type="primary"
+                // type="primary"
                 htmlType="submit"
                 style={{ width: "100%" }}
                 loading={loginPending}
