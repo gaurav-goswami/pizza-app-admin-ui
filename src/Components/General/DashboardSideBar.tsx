@@ -1,4 +1,14 @@
-import { Avatar, Badge, Breadcrumb, Dropdown, Flex, Layout, Menu, Space, theme } from "antd";
+import {
+  Avatar,
+  Badge,
+  Breadcrumb,
+  Dropdown,
+  Flex,
+  Layout,
+  Menu,
+  Space,
+  theme,
+} from "antd";
 import { ReactNode, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { DASHBOARD_ROUTES } from "../../utils/routeConstants";
@@ -17,8 +27,8 @@ const { Sider, Header, Footer, Content } = Layout;
 const DashboardSideBar = ({ children }: { children: ReactNode }) => {
   const [collapsed, setCollapsed] = useState(false);
   const { pathname } = useLocation();
-  const {logoutUser} = useLogout();
-  const {user} = useAuthStore();
+  const { logoutUser } = useLogout();
+  const { user } = useAuthStore();
 
   const {
     token: { colorBgContainer },
@@ -72,32 +82,39 @@ const DashboardSideBar = ({ children }: { children: ReactNode }) => {
         <Layout>
           <Header style={{ padding: "0 16px", background: colorBgContainer }}>
             <Flex gap="middle" align="center" justify="space-between">
-              <Badge text={user?.role === DASHBOARD_ALLOWED_ROLES.ADMIN ? 'Admin' : user?.tenant?.address} status="success" />
+              <Badge
+                text={
+                  user?.role === DASHBOARD_ALLOWED_ROLES.ADMIN
+                    ? "Admin"
+                    : user?.tenant?.address
+                }
+                status="success"
+              />
               <Space size={16}>
                 <Badge dot>
                   <BellFilled />
                 </Badge>
-                <Dropdown menu={{ items: [ 
-                    {
-                      key: "logout",
-                      label: (
-                        'Logout'
-                      ),
-                      onClick: () => logoutUser()
-                    }
-                  ] }} placement="bottomRight">
-                    <Avatar style={{ background: '#fde3cf', color: '#f56a00'}}>
-                      G
-                    </Avatar>
-                  </Dropdown>
+                <Dropdown
+                  menu={{
+                    items: [
+                      {
+                        key: "logout",
+                        label: "Logout",
+                        onClick: () => logoutUser(),
+                      },
+                    ],
+                  }}
+                  placement="bottomRight"
+                >
+                  <Avatar style={{ background: "#fde3cf", color: "#f56a00" }}>
+                    G
+                  </Avatar>
+                </Dropdown>
               </Space>
             </Flex>
           </Header>
           <Content style={{ margin: "0 10px" }}>
-            <Breadcrumb style={{ margin: "16px 0" }}>
-              <BreadcrumbItem>Dashboard</BreadcrumbItem>
-              <BreadcrumbItem>{pathname.replace("/", "")}</BreadcrumbItem>
-            </Breadcrumb>
+             <Breadcrumb separator=">" items={[{title: <NavLink to={DASHBOARD_ROUTES.root}>Dashboard</NavLink>} , {title: pathname.replace("/", "")}]}/>
             {children}
           </Content>
           <Footer style={{ textAlign: "center" }}>Pizza App ©2024</Footer>
