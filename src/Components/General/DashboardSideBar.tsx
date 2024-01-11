@@ -113,7 +113,7 @@ const DashboardSideBar = ({ children }: { children: ReactNode }) => {
               </Space>
             </Flex>
           </Header>
-          <Content style={{ margin: "0 10px" }}>
+          <Content style={{ margin: "10px 15px" }}>
              <Breadcrumb separator=">" items={[{title: <NavLink to={DASHBOARD_ROUTES.root}>Dashboard</NavLink>} , {title: pathname.replace("/", "")}]}/>
             {children}
           </Content>

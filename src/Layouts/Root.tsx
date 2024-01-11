@@ -17,12 +17,12 @@ const Root = () => {
     queryKey: ["self"],
     queryFn: getSelf,
     retry: (failureCount: number, error) => {
-      if(error instanceof AxiosError && error.request?.status === 401) {
+      if (error instanceof AxiosError && error.request?.status === 401) {
         return false;
-      };
-      
+      }
+
       return failureCount < 1;
-    }
+    },
   });
 
   useEffect(() => {
@@ -37,7 +37,11 @@ const Root = () => {
 
   return (
     <>
-      <Outlet />
+      <div className="w-full bg-gray-50">
+        <div className="max-w-[2100px] m-auto">
+          <Outlet />
+        </div>
+      </div>
     </>
   );
 };
