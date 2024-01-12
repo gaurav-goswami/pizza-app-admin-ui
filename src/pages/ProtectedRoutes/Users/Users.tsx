@@ -4,6 +4,11 @@ import { throwErrorMessage } from "../../../utils/methods";
 import { IUser } from "./types";
 import { Table, Typography } from "antd";
 import { COLORS } from "../../../styles/theme";
+import dayjs from "dayjs";
+import { Navigate } from "react-router-dom";
+import { useAuthStore } from "../../../store";
+import { DASHBOARD_ALLOWED_ROLES } from "../../../utils/constants";
+import { DASHBOARD_ROUTES } from "../../../utils/routeConstants";
 
 const getAllUsers = async () => {
   try {
@@ -18,12 +23,7 @@ const getAllUsers = async () => {
 const { Text } = Typography;
 const userColumn = [
   {
-    title: "ID",
-    dataIndex: "id",
-    key: "id",
-  },
-  {
-    title: "First Name",
+    title: "Name",
     dataIndex: "firstName",
     key: "firstName",
     render: (_text: string, record: IUser) => {
@@ -33,6 +33,8 @@ const userColumn = [
         </Text>
       );
     },
+    fixed: "left",
+    width: 220
   },
   {
     title: "Email",
@@ -47,9 +49,22 @@ const userColumn = [
       return <Text style={{ color: COLORS.COLOR_PRIMARY }}>{text}</Text>;
     },
   },
+  {
+    title: "Registered On",
+    dataIndex: "createdAt",
+    key: "createdAt",
+    render: (text: string) => {
+      return <Text>{dayjs(text).format("DD MMM YYYY")}</Text>;
+    },
+  },
 ];
 
 const Users = () => {
+  const { user } = useAuthStore();
+  if (user && user.role !== DASHBOARD_ALLOWED_ROLES.ADMIN) {
+    return <Navigate to={DASHBOARD_ROUTES.root} />;
+  }
+
   const {
     data: usersData,
     isLoading: usersLoading,
@@ -67,7 +82,6 @@ const Users = () => {
       <Table
         columns={userColumn}
         dataSource={usersData}
-        style={{ marginTop: "10px" }}
         scroll={{ x: 1300 }}
       />
     </>

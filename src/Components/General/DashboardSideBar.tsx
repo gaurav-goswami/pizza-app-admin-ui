@@ -19,31 +19,17 @@ import { GiKnifeFork } from "react-icons/gi";
 import { FaGift } from "react-icons/fa6";
 import { BellFilled } from "@ant-design/icons";
 import useLogout from "../../hooks/useLogout";
-import BreadcrumbItem from "antd/es/breadcrumb/BreadcrumbItem";
 import { useAuthStore } from "../../store";
 import { DASHBOARD_ALLOWED_ROLES } from "../../utils/constants";
 
 const { Sider, Header, Footer, Content } = Layout;
-const DashboardSideBar = ({ children }: { children: ReactNode }) => {
-  const [collapsed, setCollapsed] = useState(false);
-  const { pathname } = useLocation();
-  const { logoutUser } = useLogout();
-  const { user } = useAuthStore();
 
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
-
-  const items = [
+const getMenuItems = (userRole: string) => {
+  const baseItems = [
     {
       key: DASHBOARD_ROUTES.root,
       icon: <MdDashboard />,
       label: <NavLink to={DASHBOARD_ROUTES.root}>Home</NavLink>,
-    },
-    {
-      key: DASHBOARD_ROUTES.users,
-      icon: <FaUsers />,
-      label: <NavLink to={DASHBOARD_ROUTES.users}>Users</NavLink>,
     },
     {
       key: DASHBOARD_ROUTES.restaurants,
@@ -62,6 +48,30 @@ const DashboardSideBar = ({ children }: { children: ReactNode }) => {
     },
   ];
 
+  if (userRole && userRole === DASHBOARD_ALLOWED_ROLES.ADMIN) {
+    const menu = [...baseItems];
+    menu.splice(1, 0, {
+      key: DASHBOARD_ROUTES.users,
+      icon: <FaUsers />,
+      label: <NavLink to={DASHBOARD_ROUTES.users}>Users</NavLink>,
+    });
+    return menu;
+  }
+
+  return baseItems;
+};
+
+const DashboardSideBar = ({ children }: { children: ReactNode }) => {
+  const [collapsed, setCollapsed] = useState(false);
+  const { pathname } = useLocation();
+  const { logoutUser } = useLogout();
+  const { user } = useAuthStore();
+
+  const {
+    token: { colorBgContainer },
+  } = theme.useToken();
+
+  const items = getMenuItems(user?.role as string);
   return (
     <>
       <Layout style={{ minHeight: "100vh" }}>
@@ -114,8 +124,20 @@ const DashboardSideBar = ({ children }: { children: ReactNode }) => {
             </Flex>
           </Header>
           <Content style={{ margin: "10px 15px" }}>
-             <Breadcrumb separator=">" items={[{title: <NavLink to={DASHBOARD_ROUTES.root}>Dashboard</NavLink>} , {title: pathname.replace("/", "")}]}/>
-            {children}
+            <Space direction="vertical" style={{ width: "100%" }} size="large">
+              <Breadcrumb
+                separator=">"
+                items={[
+                  {
+                    title: (
+                      <NavLink to={DASHBOARD_ROUTES.root}>Dashboard</NavLink>
+                    ),
+                  },
+                  { title: pathname.replace("/", "") },
+                ]}
+              />
+              {children}
+            </Space>
           </Content>
           <Footer style={{ textAlign: "center" }}>Pizza App ©2024</Footer>
         </Layout>
