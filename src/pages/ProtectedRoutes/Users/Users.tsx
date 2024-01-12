@@ -2,13 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 import { getUsers } from "../../../http/apis/api";
 import { throwErrorMessage } from "../../../utils/methods";
 import { IUser } from "./types";
-import { Table, Typography } from "antd";
+import { Space, Table, Typography } from "antd";
 import { COLORS } from "../../../styles/theme";
 import dayjs from "dayjs";
 import { Navigate } from "react-router-dom";
 import { useAuthStore } from "../../../store";
 import { DASHBOARD_ALLOWED_ROLES } from "../../../utils/constants";
 import { DASHBOARD_ROUTES } from "../../../utils/routeConstants";
+import UsersFilter from "./Components/UsersFilter";
 
 const getAllUsers = async () => {
   try {
@@ -34,7 +35,7 @@ const userColumn = [
       );
     },
     fixed: "left",
-    width: 220
+    width: 220,
   },
   {
     title: "Email",
@@ -79,11 +80,14 @@ const Users = () => {
       {usersLoading && <div>Loading...</div>}
       {usersError && <div>Error</div>}
 
-      <Table
-        columns={userColumn}
-        dataSource={usersData}
-        scroll={{ x: 1300 }}
-      />
+      <Space direction="vertical" size="middle">
+        <UsersFilter />
+        <Table
+          columns={userColumn}
+          dataSource={usersData}
+          scroll={{ x: 1300 }}
+        />
+      </Space>
     </>
   );
 };
