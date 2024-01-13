@@ -1,10 +1,12 @@
-import { Button, Card, Col, Input, Row, Select } from "antd";
+import { Button, Card, Col, Flex, Input, Row, Select } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 
 const { Search } = Input;
 const { Option } = Select;
 
-const UsersFilter = () => {
+type TFilterFnType = (filterName: string, filterValue: string) => void;
+
+const UsersFilter = ({ onFilterChange }: { onFilterChange: TFilterFnType }) => {
   return (
     <>
       <Card>
@@ -12,35 +14,43 @@ const UsersFilter = () => {
           <Col span={16}>
             <Row gutter={20}>
               <Col span={8}>
-                <Search />
+                <Search
+                  placeholder="Search"
+                  onChange={(e) =>
+                    onFilterChange("searchFilterQuery", e.target.value)
+                  }
+                  allowClear
+                />
               </Col>
-              <Col span={4}>
+              <Flex gap="10px">
                 <Select
-                  style={{ width: "100%" }}
+                  style={{ width: "100%", minWidth: "max-content" }}
                   allowClear
                   placeholder="Select Role"
+                  onChange={(selectValue) =>
+                    onFilterChange("roleFilter", selectValue)
+                  }
                 >
                   <Option value="admin">Admin</Option>
                   <Option value="manager">Manager</Option>
                   <Option value="customer">Customer</Option>
                 </Select>
-              </Col>
-              <Col span={4}>
                 <Select
-                  style={{ width: "100%" }}
+                  style={{ width: "100%", minWidth: "max-content" }}
                   allowClear
                   placeholder="Select Status"
+                  onChange={(selectValue) =>
+                    onFilterChange("statusFilter", selectValue)
+                  }
                 >
                   <Option value="ban">Ban</Option>
                   <Option value="ative">Active</Option>
                 </Select>
-              </Col>
+              </Flex>
             </Row>
           </Col>
           <Col span={8} style={{ display: "flex", justifyContent: "end" }}>
-            <Button icon={<PlusOutlined />}>
-              Add user
-            </Button>
+            <Button icon={<PlusOutlined />}>Add user</Button>
           </Col>
         </Row>
       </Card>

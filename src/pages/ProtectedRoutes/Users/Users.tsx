@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getUsers } from "../../../http/apis/api";
 import { throwErrorMessage } from "../../../utils/methods";
 import { IUser } from "./types";
-import { Space, Table, Typography } from "antd";
+import { Flex, Space, Table, Typography } from "antd";
 import { COLORS } from "../../../styles/theme";
 import dayjs from "dayjs";
 import { Navigate } from "react-router-dom";
@@ -24,6 +24,13 @@ const getAllUsers = async () => {
 const { Text } = Typography;
 const userColumn = [
   {
+    title: 'ID',
+    dataIndex: 'id',
+    key: 'id',
+    fixed: "left",
+    width: 120,
+  },
+  {
     title: "Name",
     dataIndex: "firstName",
     key: "firstName",
@@ -34,8 +41,6 @@ const userColumn = [
         </Text>
       );
     },
-    fixed: "left",
-    width: 220,
   },
   {
     title: "Email",
@@ -75,19 +80,24 @@ const Users = () => {
     queryFn: getAllUsers,
   });
 
+  const handleFilterChange = (filterName: string, filterValue: string) => {
+    console.log('Filter', filterName, filterValue);
+  };
+
   return (
     <>
       {usersLoading && <div>Loading...</div>}
       {usersError && <div>Error</div>}
 
-      <Space direction="vertical" size="middle">
-        <UsersFilter />
+      <Flex vertical gap="10px">
+        <UsersFilter onFilterChange={handleFilterChange} />
         <Table
           columns={userColumn}
           dataSource={usersData}
           scroll={{ x: 1300 }}
+          rowKey={'id'}
         />
-      </Space>
+      </Flex>
     </>
   );
 };
