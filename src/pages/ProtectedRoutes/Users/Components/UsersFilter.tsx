@@ -1,12 +1,14 @@
-import { Button, Card, Col, Flex, Input, Row, Select } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { Card, Col, Flex, Input, Row, Select } from "antd";
 
 const { Search } = Input;
 const { Option } = Select;
 
-type TFilterFnType = (filterName: string, filterValue: string) => void;
+type TFilterType = {
+  onFilterChange: (filterName: string, filterValue: string) => void;
+  children: React.ReactNode;
+};
 
-const UsersFilter = ({ onFilterChange }: { onFilterChange: TFilterFnType }) => {
+const UsersFilter = ({ onFilterChange, children }: TFilterType) => {
   return (
     <>
       <Card>
@@ -50,7 +52,7 @@ const UsersFilter = ({ onFilterChange }: { onFilterChange: TFilterFnType }) => {
             </Row>
           </Col>
           <Col span={8} style={{ display: "flex", justifyContent: "end" }}>
-            <Button icon={<PlusOutlined />}>Add user</Button>
+            {children}
           </Col>
         </Row>
       </Card>

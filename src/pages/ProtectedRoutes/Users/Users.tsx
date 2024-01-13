@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getUsers } from "../../../http/apis/api";
 import { throwErrorMessage } from "../../../utils/methods";
 import { IUser } from "./types";
-import { Flex, Space, Table, Typography } from "antd";
+import { Button, Drawer, Flex, Space, Table, Typography } from "antd";
 import { COLORS } from "../../../styles/theme";
 import dayjs from "dayjs";
 import { Navigate } from "react-router-dom";
@@ -10,6 +10,8 @@ import { useAuthStore } from "../../../store";
 import { DASHBOARD_ALLOWED_ROLES } from "../../../utils/constants";
 import { DASHBOARD_ROUTES } from "../../../utils/routeConstants";
 import UsersFilter from "./Components/UsersFilter";
+import { useState } from "react";
+import { PlusOutlined } from "@ant-design/icons";
 
 const getAllUsers = async () => {
   try {
@@ -24,9 +26,9 @@ const getAllUsers = async () => {
 const { Text } = Typography;
 const userColumn = [
   {
-    title: 'ID',
-    dataIndex: 'id',
-    key: 'id',
+    title: "ID",
+    dataIndex: "id",
+    key: "id",
     fixed: "left",
     width: 120,
   },
@@ -71,6 +73,8 @@ const Users = () => {
     return <Navigate to={DASHBOARD_ROUTES.root} />;
   }
 
+  const [drawerOpen, setDrawerOpen] = useState<boolean>(true);
+
   const {
     data: usersData,
     isLoading: usersLoading,
@@ -81,7 +85,7 @@ const Users = () => {
   });
 
   const handleFilterChange = (filterName: string, filterValue: string) => {
-    console.log('Filter', filterName, filterValue);
+    console.log("Filter", filterName, filterValue);
   };
 
   return (
@@ -90,13 +94,35 @@ const Users = () => {
       {usersError && <div>Error</div>}
 
       <Flex vertical gap="10px">
-        <UsersFilter onFilterChange={handleFilterChange} />
+        <UsersFilter onFilterChange={handleFilterChange}>
+          <Button icon={<PlusOutlined />} onClick={() => setDrawerOpen(true)}>
+            Add user
+          </Button>
+        </UsersFilter>
         <Table
           columns={userColumn}
           dataSource={usersData}
           scroll={{ x: 1300 }}
-          rowKey={'id'}
+          rowKey={"id"}
         />
+
+        <Drawer
+          title="Create User"
+          width={500}
+          destroyOnClose
+          onClose={() => {
+            setDrawerOpen(false);
+          }}
+          open={drawerOpen}
+          extra={
+            <Space>
+              <Button>Cancel</Button>
+              <Button>Submit</Button>
+            </Space>
+          }
+        >
+          Content
+        </Drawer>
       </Flex>
     </>
   );
