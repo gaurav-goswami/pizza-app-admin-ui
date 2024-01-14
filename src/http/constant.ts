@@ -1,5 +1,6 @@
 const AUTH_BASE = '/auth'
 const USERS_BASE = '/users'
+const TENANT_BASE = '/tenants'
 
 export const AUTH_ROUTES = {
     login: `${AUTH_BASE}/login`,
@@ -9,4 +10,8 @@ export const AUTH_ROUTES = {
 
 export const USERS_ROUTES = {
     allUsers: `${USERS_BASE}/`
+}
+
+export const TENANT_ROUTES = {
+    allTenants: `${TENANT_BASE}/`
 }

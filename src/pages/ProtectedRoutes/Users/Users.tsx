@@ -73,7 +73,7 @@ const Users = () => {
     return <Navigate to={DASHBOARD_ROUTES.root} />;
   }
 
-  const [drawerOpen, setDrawerOpen] = useState<boolean>(true);
+  const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
 
   const {
     data: usersData,
