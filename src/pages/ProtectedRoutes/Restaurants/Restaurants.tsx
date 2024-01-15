@@ -1,9 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { getTenants } from "../../../http/apis/api";
 import { throwErrorMessage } from "../../../utils/methods";
-import { Table, Typography } from "antd";
+import { Button, Drawer, Flex, Space, Table, Typography } from "antd";
 import { COLORS } from "../../../styles/theme";
 import dayjs from "dayjs";
+import { useState } from "react";
+import RestaurantFilter from "./Components/RestaurantFilter";
+import { PlusOutlined } from "@ant-design/icons";
 
 const getAllTenants = async () => {
   try {
@@ -54,10 +57,8 @@ const tenantColumns = [
     dataIndex: "updatedAt",
     key: "updatedAt",
     render: (text: string) => {
-      return (
-        <Text>{dayjs(text).format('DD MMM YYYY')}</Text>
-      )
-    }
+      return <Text>{dayjs(text).format("DD MMM YYYY")}</Text>;
+    },
   },
 ];
 
@@ -67,17 +68,47 @@ const Restaurants = () => {
     queryFn: getAllTenants,
   });
 
-  console.log(tenantsList);
+  const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
+
+  const handleFilterChange = (filterName: string, filterValue: string) => {
+    console.log("Filter", filterName, filterValue);
+  };
 
   return (
     <>
       {tenantsLoading && <div>Loading...</div>}
-      <Table
-        columns={tenantColumns}
-        dataSource={tenantsList}
-        scroll={{ x: 1300 }}
-        rowKey={"id"}
-      />
+
+      <Flex gap={10} vertical>
+        <RestaurantFilter onFilterChange={handleFilterChange}>
+          <Button icon={<PlusOutlined />} onClick={() => setDrawerOpen(true)}>
+            Add Tenant
+          </Button>
+        </RestaurantFilter>
+        <Table
+          columns={tenantColumns}
+          dataSource={tenantsList}
+          scroll={{ x: 1300 }}
+          rowKey={"id"}
+        />
+
+        <Drawer
+          title="Create Tenant"
+          width={500}
+          destroyOnClose
+          onClose={() => {
+            setDrawerOpen(false);
+          }}
+          open={drawerOpen}
+          extra={
+            <Space>
+              <Button>Cancel</Button>
+              <Button>Submit</Button>
+            </Space>
+          }
+        >
+          Content
+        </Drawer>
+      </Flex>
     </>
   );
 };
