@@ -2,7 +2,16 @@ import { useQuery } from "@tanstack/react-query";
 import { getUsers } from "../../../http/apis/api";
 import { throwErrorMessage } from "../../../utils/methods";
 import { IUser } from "./types";
-import { Button, Drawer, Flex, Space, Table, Typography } from "antd";
+import {
+  Button,
+  Drawer,
+  Flex,
+  Form,
+  Space,
+  Table,
+  Typography,
+  theme,
+} from "antd";
 import { COLORS } from "../../../styles/theme";
 import dayjs from "dayjs";
 import { Navigate } from "react-router-dom";
@@ -12,6 +21,7 @@ import { DASHBOARD_ROUTES } from "../../../utils/routeConstants";
 import UsersFilter from "./Components/UsersFilter";
 import { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
+import UserForm from "./Components/UserForm";
 
 const getAllUsers = async () => {
   try {
@@ -88,6 +98,10 @@ const Users = () => {
     console.log("Filter", filterName, filterValue);
   };
 
+  const {
+    token: { colorBgLayout },
+  } = theme.useToken();
+
   return (
     <>
       {usersLoading && <div>Loading...</div>}
@@ -110,6 +124,7 @@ const Users = () => {
           title="Create User"
           width={500}
           destroyOnClose
+          styles={{ body: { background: colorBgLayout } }}
           onClose={() => {
             setDrawerOpen(false);
           }}
@@ -121,7 +136,9 @@ const Users = () => {
             </Space>
           }
         >
-          Content
+          <Form layout="vertical">
+            <UserForm />
+          </Form>
         </Drawer>
       </Flex>
     </>

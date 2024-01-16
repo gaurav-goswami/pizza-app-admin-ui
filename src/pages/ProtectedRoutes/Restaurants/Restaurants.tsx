@@ -81,7 +81,7 @@ const Restaurants = () => {
       <Flex gap={10} vertical>
         <RestaurantFilter onFilterChange={handleFilterChange}>
           <Button icon={<PlusOutlined />} onClick={() => setDrawerOpen(true)}>
-            Add Tenant
+            Add Restaurant
           </Button>
         </RestaurantFilter>
         <Table
