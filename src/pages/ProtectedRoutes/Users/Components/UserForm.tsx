@@ -1,24 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
 import { Card, Col, Form, Input, Row, Select, Space } from "antd";
-import { getTenants } from "../../../../http/apis/api";
-import { throwErrorMessage } from "../../../../utils/methods";
 import { ITenantData } from "../../Restaurants/types";
-
-const getAllTenants = async () => {
-  try {
-    const { data } = await getTenants();
-    return data;
-  } catch (error) {
-    throwErrorMessage({ err: error });
-    throw error;
-  }
-};
+import useGetAllTenants from "../../../../hooks/useGetAllTenants";
 
 const UserForm = () => {
-  const { data: tenantsList, isLoading: tenantsLoading } = useQuery({
-    queryKey: ["tenants"],
-    queryFn: getAllTenants,
-  });
+  const { tenantsList, tenantsLoading } = useGetAllTenants();
+
   return (
     <>
       <Row>
@@ -130,6 +116,7 @@ const UserForm = () => {
                       allowClear
                       placeholder="Select Restaurant"
                     >
+                      {tenantsLoading && <div>Loading...</div>}
                       {tenantsList &&
                         tenantsList.map((tenant: ITenantData) => {
                           return (

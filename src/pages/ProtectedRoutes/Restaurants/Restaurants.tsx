@@ -7,16 +7,7 @@ import dayjs from "dayjs";
 import { useState } from "react";
 import RestaurantFilter from "./Components/RestaurantFilter";
 import { PlusOutlined } from "@ant-design/icons";
-
-const getAllTenants = async () => {
-  try {
-    const { data } = await getTenants();
-    return data;
-  } catch (error) {
-    throwErrorMessage({ err: error });
-    throw error;
-  }
-};
+import useGetAllTenants from "../../../hooks/useGetAllTenants";
 
 const { Text } = Typography;
 const tenantColumns = [
@@ -63,11 +54,8 @@ const tenantColumns = [
 ];
 
 const Restaurants = () => {
-  const { data: tenantsList, isLoading: tenantsLoading } = useQuery({
-    queryKey: ["tenants"],
-    queryFn: getAllTenants,
-  });
 
+  const { tenantsList, tenantsLoading } = useGetAllTenants();
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
 
   const handleFilterChange = (filterName: string, filterValue: string) => {
