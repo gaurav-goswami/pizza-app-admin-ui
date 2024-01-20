@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { getUsers } from "../../../http/apis/api";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { createUser, getUsers } from "../../../http/apis/api";
 import { throwErrorMessage } from "../../../utils/methods";
 import { IUser } from "./types";
 import {
@@ -22,6 +22,7 @@ import UsersFilter from "./Components/UsersFilter";
 import { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import UserForm from "./Components/UserForm";
+import { useForm } from "antd/es/form/Form";
 
 const getAllUsers = async () => {
   try {
@@ -83,6 +84,14 @@ const Users = () => {
     return <Navigate to={DASHBOARD_ROUTES.root} />;
   }
 
+  const queryClient = useQueryClient();
+
+  const {
+    token: { colorBgLayout },
+  } = theme.useToken();
+
+  const [form] = useForm();
+
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
 
   const {
@@ -98,9 +107,28 @@ const Users = () => {
     console.log("Filter", filterName, filterValue);
   };
 
-  const {
-    token: { colorBgLayout },
-  } = theme.useToken();
+  const createUserFn = async (userData: IUser) => {
+    try {
+      const { data } = await createUser(userData);
+      return data;
+    } catch (error) {
+      throwErrorMessage({ err: error });
+      throw error;
+    }
+  };
+
+  const { mutate: userMutate } = useMutation({
+    mutationKey: ["user"],
+    mutationFn: (data: IUser) => createUserFn(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+  });
+
+  const handleSubmit = async () => {
+    await form.validateFields();
+    userMutate(form.getFieldsValue());
+  };
 
   return (
     <>
@@ -132,11 +160,11 @@ const Users = () => {
           extra={
             <Space>
               <Button>Cancel</Button>
-              <Button>Submit</Button>
+              <Button onClick={handleSubmit}>Submit</Button>
             </Space>
           }
         >
-          <Form layout="vertical">
+          <Form layout="vertical" form={form}>
             <UserForm />
           </Form>
         </Drawer>

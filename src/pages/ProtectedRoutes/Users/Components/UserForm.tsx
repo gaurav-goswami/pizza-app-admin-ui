@@ -89,6 +89,7 @@ const UserForm = () => {
                         message: "Role is required",
                       },
                     ]}
+                    name="role"
                   >
                     <Select
                       style={{ width: "100%", minWidth: "max-content" }}
@@ -110,17 +111,18 @@ const UserForm = () => {
                         message: "Restaurant is required",
                       },
                     ]}
+                    name="tenant"
                   >
+                    {tenantsLoading && <div>Loading...</div>}
                     <Select
                       style={{ width: "100%", minWidth: "max-content" }}
                       allowClear
                       placeholder="Select Restaurant"
                     >
-                      {tenantsLoading && <div>Loading...</div>}
                       {tenantsList &&
                         tenantsList.map((tenant: ITenantData) => {
                           return (
-                            <Select.Option key={tenant.id}>
+                            <Select.Option key={tenant.id} value={tenant.id}>
                               {tenant.name}
                             </Select.Option>
                           );

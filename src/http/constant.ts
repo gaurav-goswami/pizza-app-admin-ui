@@ -9,7 +9,7 @@ export const AUTH_ROUTES = {
 }
 
 export const USERS_ROUTES = {
-    allUsers: `${USERS_BASE}/`
+    user: `${USERS_BASE}/`
 }
 
 export const TENANT_ROUTES = {
