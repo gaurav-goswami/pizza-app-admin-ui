@@ -128,6 +128,8 @@ const Users = () => {
   const handleSubmit = async () => {
     await form.validateFields();
     userMutate(form.getFieldsValue());
+    form.resetFields();
+    setDrawerOpen(false);
   };
 
   return (
@@ -155,11 +157,19 @@ const Users = () => {
           styles={{ body: { background: colorBgLayout } }}
           onClose={() => {
             setDrawerOpen(false);
+            form.resetFields();
           }}
           open={drawerOpen}
           extra={
             <Space>
-              <Button>Cancel</Button>
+              <Button
+                onClick={() => {
+                  form.resetFields();
+                  setDrawerOpen(false);
+                }}
+              >
+                Cancel
+              </Button>
               <Button onClick={handleSubmit}>Submit</Button>
             </Space>
           }
