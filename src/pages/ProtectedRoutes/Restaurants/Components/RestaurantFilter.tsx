@@ -1,7 +1,6 @@
-import { Card, Col, Flex, Input, Row, Select } from "antd";
+import { Card, Col, Input, Row } from "antd";
 
 const { Search } = Input;
-const { Option } = Select;
 
 type TFilterType = {
   onFilterChange: (filterName: string, filterValue: string) => void;

@@ -26,3 +26,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     </QueryClientProvider>
   </React.StrictMode>
 );
+
+// TODO: 
+// 1. add form to create restaurant
+// 2. check the create user endpoint for setting tenant ID
+// 3. add custom component for smaller devices (cannot access the application in smaller devices)
+// 4. refactor code (User file)

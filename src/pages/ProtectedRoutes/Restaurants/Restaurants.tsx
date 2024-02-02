@@ -1,13 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import { getTenants } from "../../../http/apis/api";
 import { throwErrorMessage } from "../../../utils/methods";
-import { Button, Drawer, Flex, Space, Table, Typography } from "antd";
+import { Button, Drawer, Flex, Form, Space, Table, Typography } from "antd";
 import { COLORS } from "../../../styles/theme";
 import dayjs from "dayjs";
 import { useState } from "react";
 import RestaurantFilter from "./Components/RestaurantFilter";
 import { PlusOutlined } from "@ant-design/icons";
 import useGetAllTenants from "../../../hooks/useGetAllTenants";
+import { useForm } from "antd/es/form/Form";
+import TenantForm from "./Components/TenantForm";
 
 const { Text } = Typography;
 const tenantColumns = [
@@ -57,6 +59,7 @@ const Restaurants = () => {
 
   const { tenantsList, tenantsLoading } = useGetAllTenants();
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
+  const [form] = useForm();
 
   const handleFilterChange = (filterName: string, filterValue: string) => {
     console.log("Filter", filterName, filterValue);
@@ -94,7 +97,9 @@ const Restaurants = () => {
             </Space>
           }
         >
-          Content
+          <Form layout='vertical' form={form}>
+            <TenantForm />
+          </Form>
         </Drawer>
       </Flex>
     </>

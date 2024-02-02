@@ -80,20 +80,15 @@ const userColumn = [
 
 const Users = () => {
   const { user } = useAuthStore();
-  if (user && user.role !== DASHBOARD_ALLOWED_ROLES.ADMIN) {
-    return <Navigate to={DASHBOARD_ROUTES.root} />;
-  }
-
+  
   const queryClient = useQueryClient();
-
+  const [form] = useForm();
+  const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
+  
   const {
     token: { colorBgLayout },
   } = theme.useToken();
-
-  const [form] = useForm();
-
-  const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
-
+  
   const {
     data: usersData,
     isLoading: usersLoading,
@@ -132,6 +127,10 @@ const Users = () => {
     setDrawerOpen(false);
   };
 
+  if (user && user.role !== DASHBOARD_ALLOWED_ROLES.ADMIN) {
+    return <Navigate to={DASHBOARD_ROUTES.root} />;
+  }
+
   return (
     <>
       {usersLoading && <div>Loading...</div>}
@@ -145,7 +144,7 @@ const Users = () => {
         </UsersFilter>
         <Table
           columns={userColumn}
-          dataSource={usersData}
+          dataSource={usersData || []}
           scroll={{ x: 1300 }}
           rowKey={"id"}
         />
