@@ -15,3 +15,5 @@ export const USERS_ROUTES = {
 export const TENANT_ROUTES = {
     allTenants: `${TENANT_BASE}/`
 }
+
+export const PER_PAGE = 6;
