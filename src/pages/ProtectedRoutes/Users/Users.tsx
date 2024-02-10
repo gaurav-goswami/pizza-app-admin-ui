@@ -23,10 +23,19 @@ import { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import UserForm from "./Components/UserForm";
 import { useForm } from "antd/es/form/Form";
+import { PER_PAGE } from "../../../http/constant";
 
-const getAllUsers = async () => {
+const getAllUsers = async (queryParams: {
+  perPage: number;
+  currentPage: number;
+}) => {
   try {
-    const { data } = await getUsers();
+    const queryString = new URLSearchParams(
+      queryParams as unknown as Record<string, string>
+    ).toString();
+    console.log("query string is", queryString);
+
+    const { data } = await getUsers(queryString);
     return data;
   } catch (error) {
     throwErrorMessage({ err: error });
@@ -80,22 +89,26 @@ const userColumn = [
 
 const Users = () => {
   const { user } = useAuthStore();
-  
+
   const queryClient = useQueryClient();
   const [form] = useForm();
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
-  
+  const [queryParams, setQueryParams] = useState({
+    perPage: PER_PAGE,
+    currentPage: 1,
+  });
+
   const {
     token: { colorBgLayout },
   } = theme.useToken();
-  
+
   const {
     data: usersData,
     isLoading: usersLoading,
     isError: usersError,
   } = useQuery({
-    queryKey: ["users"],
-    queryFn: getAllUsers,
+    queryKey: ["users", queryParams],
+    queryFn: () => getAllUsers(queryParams),
   });
 
   const handleFilterChange = (filterName: string, filterValue: string) => {
@@ -144,9 +157,23 @@ const Users = () => {
         </UsersFilter>
         <Table
           columns={userColumn}
-          dataSource={usersData || []}
+          dataSource={usersData?.data || []}
           scroll={{ x: 1300 }}
           rowKey={"id"}
+          pagination={{
+            total: usersData?.total,
+            pageSize: queryParams.perPage,
+            current: queryParams.currentPage,
+            onChange: (page) => {
+              console.log(page);
+              setQueryParams((prev) => {
+                return {
+                  ...prev,
+                  currentPage: page,
+                };
+              });
+            },
+          }}
         />
 
         <Drawer
